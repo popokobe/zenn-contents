@@ -593,7 +593,7 @@ rspec ./roles/apache2/spec/apache2_spec.rb:4 # Package "apache2" is expected to 
 
 ## 改善点
 ### Volumeの永続化ができていない
-Volumeの永続化ができておらず、ハンズオン終了後にコンテナを落とすとデータが消失してしまいます。。
+Volumeの永続化ができておらず、ハンズオン終了後にコンテナを落とすとデータが消失してしまいます。
 
 ```diff yml:comopse.yml
 -     volumes:
@@ -616,22 +616,25 @@ https://qiita.com/cheekykorkind/items/ba912b62d1f59ea1b41e
 # Copy public ssh key to the target host
 sshpass -p "password" ssh-copy-id -i /root/.ssh/id_ed25519.pub -o StrictHostKeyChecking=no root@ubuntu-t1
 ```
-`ssh-copy-id`で公開鍵を配布する先を`root@ubuntu-t1`としているので、`compose.yml`で複数ホスト立ち上げたときに全ホストに公開鍵を配布できない。
+`ssh-copy-id`で公開鍵を配布する先を`root@ubuntu-t1`としているので、`compose.yml`で複数ホスト立ち上げたときに全ホストに公開鍵を配布できないです。
 
-`comose.yml`の`services`と連動して、公開鍵を配布するホストを追加できるようにしたい。
+`comose.yml`の`services`と連動して、公開鍵を配布するホストを追加できるようにしたいと考えています。
 
 
 ### Dockerイメージを軽量化したい
 `ubuntu-c`のビルド後のイメージサイズは1.09GBと巨大です。
-これではイメージを保存するストレージを圧迫してしまいますし、なにしろビルド時間が長くなり開発効率が落ちてしまいます。
+これではイメージを保存するストレージを圧迫してしまいますし、なにしろビルド時間が長くなり開発効率が落ちてしまいます。そのため、実務レベルで使う場合はさらなる軽量化が必要だと考えています。
+:::message
+もし更に軽量にできそうであればぜひコメント等でアドバイスいただければと思います！
+:::
 
-それでも今回は`ubuntu-c`のDockerfileで以下の点を工夫し、なるべくイメージサイズを軽くしようと努力はしています。
+Dockerについてはまだまだ勉強中ですが、今回は`ubuntu-c`のDockerfileで以下の点を工夫し、なるべくイメージサイズを軽くしようと努力しています。
 
 - マルチステージビルドの活用
 - `apt install -y --no-install-recommends`で不要なパッケージはインストールしない
 - `rm -rf /var/lib/apt/lists/*`でaptキャッシュを削除
 
-Dockerもまだまだ勉強中です。もし更に軽量にできそうであればぜひコメント等でアドバイスいただければと思います！
+
 
 ## 最後に
 ハンズオンはこちらで終了です。
