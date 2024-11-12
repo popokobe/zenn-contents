@@ -2,7 +2,8 @@ name: Update AWS Services List
 
 on:
   push:
-    - feature/aws-ipaddresses-services
+    branches:
+      - feature/aws-ipaddresses-services
   workflow_dispatch:
 
 jobs:
