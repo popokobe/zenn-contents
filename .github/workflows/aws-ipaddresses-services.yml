@@ -1,36 +1,42 @@
 name: Update AWS Services List
 
 on:
-  schedule:
-    - cron: '0 15 * * *' # UTC表示, JSTは9時間進んでいる
+  push:
+    - feature/aws-ipaddresses-services
   workflow_dispatch:
 
 jobs:
   update_aws_services:
     runs-on: ubuntu-latest
-    env:
-      ARTICLE_PATH="articles/aws-ipaddresses-services.md"
 
     steps:
-      - name: Fetch AWS Services List
-        id: fetch_services
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13' 
+
+      - name: Install dependencies
         run: |
-          SERVICES=$(curl -s https://ip-ranges.amazonaws.com/ip-ranges.json | jq -r '.prefixes[].service' | sort -u)
-          echo "$SERVICES" > new_services_list.txt
-      
-      - name: Check for services list changes
-        id: check_changes
+          python -m pip install --upgrade pip 
+          pip install requests
+
+      - name: Run AWS services update script
+        working-directory: scripts
         run: |
-          sed -n '/<!-- AWS_SERVICES_LIST_START -->/,/<!-- AWS_SERVICES_LIST_END -->/p' "${{ env.ARTICLE_PATH }}" | sed '/```/d' | sed '/<!--.*-->/d' > current_services_list.txt
+          python update-aws-services-in-article.py
+        env:
+          GITHUB_ENV: $GITHUB_ENV
 
-          if ! diff -q current_services_list.txt new_services_list.txt > /dev/null; then
-            echo "Services list has changed."
-            echo "services_changed_flag=true" >> $GITHUB_OUTPUT
-          else
-            echo "No changes in AWS services list."
-            echo "services_changed_flag=false" >> $GITHUB_OUTPUT
-          fi
+      - name: Commit and push changes
+        if: env.UPDATE_REQUIRED == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add aws-ipaddresses-services.md
+          git commit -m "Update AWS services list"
+          git push
 
-
-          
-
+      - name: Notify on error
+        if: env.ERROR_OCCURRED == 'true'
+        run: echo "An error occurred in the script execution."
