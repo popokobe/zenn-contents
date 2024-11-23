@@ -3,13 +3,13 @@ title: "[自動更新]AWSがIPアドレスを公開しているサービス一�
 emoji: "📰"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["aws", "vpc", "network", "ip"]
-published: false
+published: true
 ---
 
 ## はじめに
 [AWS IP アドレスの範囲](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/aws-ip-ranges.html)の通り、[ip-ranges.json](https://ip-ranges.amazonaws.com/ip-ranges.json)でAWSのサービスで使用されるIPアドレスの範囲が公開されています。
 
-運用負荷低減のため、DNS名や[AWSマネージドプレフィックスリスト](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/working-with-aws-managed-prefix-lists.html#available-aws-managed-prefix-lists)でトラフィック制御は行われるべきです。
+運用負荷逓減のため、DNS名や[AWSマネージドプレフィックスリスト](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/working-with-aws-managed-prefix-lists.html#available-aws-managed-prefix-lists)でトラフィック制御は行われるべきです。
 
 しかし、以下のようにIPアドレスレベルでトラフィック制御を行わざるを得ない場合もあるかと思います。
 - オンプレミス環境のファイアウォールでAWSサービスからのみ通信を許可したい
@@ -19,7 +19,7 @@ published: false
 
 ## AWSがIPアドレスを公開しているサービス一覧
 最新の情報を取得できるようGitHub Actionsでworkflowを組んでいます。
-毎日0時に[ip-ranges.json](https://ip-ranges.amazonaws.com/ip-ranges.json)から`service`のみを抽出し、zenn-cli経由でAWSサービス一覧が更新されています。
+毎日0時(JST)に[ip-ranges.json](https://ip-ranges.amazonaws.com/ip-ranges.json)から`service`のみを抽出し、zenn-cli経由でAWSサービス一覧が更新されています。
 
 **最終更新日時：<!-- LAST_CHECK_DATE_START --> 2024/11/23 17:41 <!-- LAST_CHECK_DATE_END -->**
 <!-- AWS_SERVICES_LIST_START -->
@@ -57,7 +57,7 @@ WORKSPACES_GATEWAYS
 この場合、特定のサービスからのトラフフィックのみを許可するといった細かい制御ができません。
 将来的にそのサービス単体でIPアドレス一覧が公開されるように祈りましょう。
 
-## AWS公式のSNSトピック
+## 補足 : AWS公式のSNSトピック
 [AWSのIPアドレス範囲の通知](https://docs.aws.amazon.com/ja_jp/vpc/latest/userguide/subscribe-notifications.html)によれば、AWSが公式で`AmazonIpSpaceChanged`というSNSトピックを用意しているようです。
 
 SNSサブスクライバーに運用担当者のメールアドレス等を設定し、変更を通知するといったワークフローが組めそうですね。
