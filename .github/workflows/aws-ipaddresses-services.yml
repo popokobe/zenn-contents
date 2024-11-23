@@ -9,6 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
+
   update_aws_services:
     runs-on: ubuntu-latest
 
@@ -26,6 +27,8 @@ jobs:
 
       - name: Run AWS services update script
         working-directory: scripts
+        env:
+          TZ: 'Asia/Tokyo'
         run: |
           python update-aws-services-in-article.py
 
