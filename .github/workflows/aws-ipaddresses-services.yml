@@ -1,6 +1,9 @@
 name: Update AWS Services List
 
 on:
+  push:
+    branches:
+      - feature/aws-ipaddresses-services
   schedule:
     - cron: 0 15 * * * #JST 0:00
   workflow_dispatch:
