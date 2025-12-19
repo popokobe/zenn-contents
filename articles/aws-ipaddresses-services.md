@@ -21,7 +21,7 @@ published: true
 最新の情報を取得できるようGitHub Actionsでworkflowを組んでいます。
 毎日0時(JST)に[ip-ranges.json](https://ip-ranges.amazonaws.com/ip-ranges.json)から`service`のみを抽出し、zenn-cli経由でAWSサービス一覧が更新されています。
 
-**最終更新日時：<!-- LAST_CHECK_DATE_START --> 2025/12/19 00:14 <!-- LAST_CHECK_DATE_END -->**
+**最終更新日時：<!-- LAST_CHECK_DATE_START --> 2025/12/20 00:13 <!-- LAST_CHECK_DATE_END -->**
 <!-- AWS_SERVICES_LIST_START -->
 ```
 AMAZON
